@@ -14,10 +14,6 @@ namespace Entregable1RestAPI.Controllers
         {
             _context = context;
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         //GET api/Customers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
@@ -60,6 +56,7 @@ namespace Entregable1RestAPI.Controllers
             {
                 return BadRequest();
             }
+            if (customer.Birthday == default(DateTime)) return StatusCode(400);
 
             _context.Entry(customer).State = EntityState.Modified;
 
@@ -88,10 +85,11 @@ namespace Entregable1RestAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
         {
-          if (_context.Customers == null)
-          {
-              return Problem("Entity set 'CustomersContext.Customers'  is null.");
-          }
+            if (_context.Customers == null)
+            {
+                return Problem("Entity set 'CustomersContext.Customers'  is null.");
+            }
+            if (customer.Birthday == default(DateTime)) return StatusCode(400);
             _context.Customers.Add(customer);
             await _context.SaveChangesAsync();
 
